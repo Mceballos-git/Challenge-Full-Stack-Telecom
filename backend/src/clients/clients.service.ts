@@ -20,9 +20,9 @@ export class ClientsService {
 
   async create(createClientDto: CreateClientDto) {
     try {
-      const user = this.userRepository.create(createClientDto);
-      await this.userRepository.save( user );
-      return user;
+      const client = this.userRepository.create(createClientDto);
+      await this.userRepository.save( client );
+      return client;
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -39,30 +39,26 @@ export class ClientsService {
   }
 
   async findOne(id: number) {
-    const user = await this.userRepository.findOneBy({ id })
-    if ( !user ) {
+    const client = await this.userRepository.findOneBy({ id })
+    if ( !client ) {
       throw new NotFoundException(`Client with id ${ id } not found`);
     }
-    return user;
+    return client;
   }
 
   async findOneByDocument(term: number) {
-    const user = await this.userRepository.find({where: { dni: term }})
-    console.log(user);
-    if ( user.length === 0 ) {
+    const client = await this.userRepository.find({where: { dni: term }})
+    console.log(client);
+    if ( client.length === 0 ) {
       throw new NotFoundException(`Client with dni ${ term } not found`);
     }
-    return user;
+    return client;
   }
 
   async update(id: number, updateClientDto: UpdateClientDto) {
+    await this.findOne( id );
     try {
-      const action = await this.userRepository.update(id, updateClientDto);
-      if ( action.affected === 0 ) {
-        throw new NotFoundException();
-      }
-      return action;
-  
+      return await this.userRepository.update(id, updateClientDto);
     } catch (error) {
       this.handleDBExceptions(error);
     }
