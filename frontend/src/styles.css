@@ -1,0 +1,12 @@
+.responsive_custom_container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .xercana-main-container {
+      width: 100% !important;
+      border-radius: 0!important;
+      margin: 0!important;
+  }
+}
