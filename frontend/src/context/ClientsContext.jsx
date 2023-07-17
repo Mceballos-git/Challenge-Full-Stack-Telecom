@@ -32,18 +32,12 @@ export const ClientsProvider = ({ children }) => {
   // } 
 
   const deleteClientContext = ( id ) => {
-    // console.log('CLIENTS', clients);
-    // const resp = clients.filter( (client) => { return client.id !== id });
-    // console.log('AFTER', resp);
-    console.log('clients antes', clients);
     setClients( clients.filter( client => client.id !== id ) );
-    console.log(clients);
   };
 
   useEffect(() => {
     ( async () => {
         const { data } = await getAllClients();
-        console.log(data);
         setClients( data );        
       })();
   }, [])

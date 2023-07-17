@@ -4,12 +4,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Root from "./routes/root";
-import ErrorPage from "./ErrorPage";
+import RootPage from "./views/root";
+import ErrorPage from "./views/ErrorPage";
 
 import "./styles.css";
-import { ClientsListView } from "./routes/ClientsListView";
-import { AddEditClientView } from "./routes/AddEditClientView";
+import { ClientsListView } from "./views/ClientsListView";
+import { AddEditClientView } from "./views/AddEditClientView";
 
 import { ClientsProvider } from './context/ClientsContext'
 
@@ -17,7 +17,7 @@ import { ClientsProvider } from './context/ClientsContext'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <RootPage />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -38,9 +38,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 
-  // <React.StrictMode>
+  <React.StrictMode>
     <ClientsProvider>
       <RouterProvider router={router} />
     </ClientsProvider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );

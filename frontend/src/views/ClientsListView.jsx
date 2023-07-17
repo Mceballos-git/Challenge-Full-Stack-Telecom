@@ -1,11 +1,11 @@
-import {  useContext } from 'react';
+import { useContext } from 'react';
 import { ClientsContext } from '../context/ClientsContext';
-import { Link } from "react-router-dom"
+import { Link  } from "react-router-dom"
+
 
 export const ClientsListView = () => {
   
   const { clients } = useContext( ClientsContext ); 
-
 
   return (   
   <>
@@ -38,10 +38,8 @@ export const ClientsListView = () => {
                                       to={`/edit-client/${ client.id }`} >
                                       <button className="btn btn-primary btn-sm"> Editar </button>
                                     </Link>
-                                    <button className="btn btn-danger btn-sm"> Eliminar </button>
                                 </td>
                             </tr>
-
                         ))
                     }
                 </tbody>
