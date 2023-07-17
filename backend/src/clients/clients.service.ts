@@ -67,6 +67,7 @@ export class ClientsService {
   async remove(id: number) {
     const client = await this.findOne( id );
     await this.userRepository.remove(client);
+    return client;
   }
 
   private handleDBExceptions( error: any ) {
