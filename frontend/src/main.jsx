@@ -11,6 +11,8 @@ import "./styles.css";
 import { ClientsListView } from "./routes/ClientsListView";
 import { AddEditClientView } from "./routes/AddEditClientView";
 
+import { ClientsProvider } from './context/ClientsContext'
+
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,11 @@ const router = createBrowserRouter([
         element: <ClientsListView />,
       },
       {
-        path: "/create/:id",
+        path: "/create",
+        element: <AddEditClientView />
+      },
+      {
+        path: "/edit-client/:id",
         element: <AddEditClientView />
       },
     ]
@@ -31,7 +37,10 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+
   // <React.StrictMode>
-    <RouterProvider router={router} />
+    <ClientsProvider>
+      <RouterProvider router={router} />
+    </ClientsProvider>
   // </React.StrictMode>
 );

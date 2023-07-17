@@ -1,30 +1,78 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useContext } from 'react';
+import { ClientsContext } from '../context/ClientsContext';
 import { useForm } from "react-hook-form";
-import { useLocation } from 'react-router-dom';
-import { getClientById } from '../../api/client';
+import { useNavigate, useParams } from 'react-router-dom';
+import { deleteClient, getClientById } from '../../api/client';
+import Swal from 'sweetalert2';
+
 
 export const AddEditClientView = () => {
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-    const [ clientId, setClientId ] = useState();
-    const location = useLocation();
-    const { from } = location.state;
+    const { deleteClientContext } = useContext( ClientsContext );
+    const { register, handleSubmit, setValue } = useForm();
+    const navigate = useNavigate();
+    const { id } = useParams();
     
     const onSubmit = data => console.log(data);
 
-    const handleDelete = () => {
-      console.log('BORRANDO');
-    }
     const handleCancel = () => {
-      console.log('CANCELANDO');
-    }
+      navigate(-1);
+    };
+
+    const handleDelete = async () => {
+      Swal.fire({
+        title:'¿Estas seguro de eliminar el cliente?',
+        text:'Una vez eliminado no podrás volver a visualizarlo',
+        icon:'warning',
+        showCancelButton:true,
+        confirmButtonColor: 'grey',
+        cancelButtonColor: 'red',
+        confirmButtonText: 'Si Eliminar!',
+        cancelButtonText: 'Cancelar',
+      }).then(async (result) => {
+        console.log('ok');
+        if (result.isConfirmed) {
+          const resp = await deleteClient( id );
+          if ( !resp ) {
+            return Swal.fire(
+              'Error!',
+              'Se produjo un error de conexión, por favor reintente nuevamente',
+              'error'
+            );
+          }
+          if( resp.status === 200 ) {
+            console.log('holaaaaaaaaaaaaaa');
+            deleteClientContext( id );
+            await Swal.fire({
+              title:'Eliminado!',
+              text:'El cliente fue eliminado correctamente',
+              icon:'success',
+              confirmButtonColor: 'grey',
+              confirmButtonText: 'OK',
+            });
+            navigate(-1);
+          }
+          if ( resp.status == 404 ) {
+            return Swal.fire(
+              'Error!',
+              'Se produjo un error, por favor reintente nuevamente',
+              'error'
+            ).then(navigate(-1));
+          }
+        }
+      })
+    };
 
     useEffect( () => {
       ( async () => {
-        setClientId(from);
-        const { data } = await getClientById( from );
-        setValue('name', data.name);
-        setValue('lastname', data.lastname);
+        if ( id !== undefined ) {  
+          const {data} = await getClientById( id ); 
+          setValue('name', data.name);
+          setValue('lastname', data.lastname);
+          setValue('sexo', data.gender);
+          setValue('phone', data.phone);
+          setValue('dni', data.dni);
+        }
       } )();
   }, [] );
     

@@ -47,7 +47,10 @@ const publicDELETE = async ( path ) => {
           return res;
       }
   } catch ( error ) {
-      throw new Error( error );
+    if ( error.code === 'ERR_BAD_REQUEST') {
+        return { status: 404 }
+    }
+    // throw new Error( error );
   }
 };
 
