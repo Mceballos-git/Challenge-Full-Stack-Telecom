@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { getAllClients, getClientById, updateClient, deleteClient  } from '../../api/client';
+import { getAllClients  } from '../../api/client';
 
 
 export const ClientsContext = createContext();
@@ -13,20 +13,11 @@ export const ClientsProvider = ({ children }) => {
     setClients([ ...clients, data]);
   }
 
-
-  const editClient = async (id, data) => {
-      clients.map((client) => {
-        if( client.id === id){
-
-
-        } 
-      })
+  const editClientContext = async (id, data) => {
+      data = {...data, id};
+      setClients(clients => clients.map((client) => (client.id === id ? data : client)));           
   }
-
-  // const handleUpdate = async ( id, data ) => {
-  //   const { affected } = updateClient( id, data )
-  // } 
-
+  
   const deleteClientContext = ( id ) => {
     setClients( clients.filter( client => client.id !== id ) );
   };
@@ -46,7 +37,7 @@ export const ClientsProvider = ({ children }) => {
       clients,
       addClientContext,
       deleteClientContext,
-      editClient
+      editClientContext
     }}>
       {children}
     </ClientsContext.Provider>
