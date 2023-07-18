@@ -21,7 +21,7 @@ const publicGET = async ( path ) => {
 const publicPOST = async ( path, data ) => {
   try {
       const res = await publicClient.post( path, data );
-      if ( res.data && res.status === 200 ) {
+      if ( res.data && res.status === 200 || 201 ) {
           return res;
       }
   } catch ( error ) {
