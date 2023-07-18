@@ -19,7 +19,7 @@ export class UpdateClientDto extends PartialType(CreateClientDto) {
   @IsPositive()
   dni: number
 
-  @IsIn(['masculino', 'femenino'])
+  @IsIn(['masculino', 'femenino', 'otro'])
   gender: string
 
 }
