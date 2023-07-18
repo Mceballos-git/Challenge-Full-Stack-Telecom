@@ -8,19 +8,19 @@ import { createNewClient, deleteClient, getClientById, updateClient } from '../.
 
 export const AddEditClientView = () => {
 
-    const { deleteClientContext, addClientContext, editClientContext } = useContext( ClientsContext );
-    const { register, handleSubmit, setValue} = useForm();
+    const { deleteClientContext, addClientContext, editClientContext, isLoading, setIsLoading, setSearchedClient } = useContext( ClientsContext );
+    const { register, handleSubmit, setValue, formState: { errors }} = useForm();
     const navigate = useNavigate();    
     const { id } = useParams();
-    const isCreateMode = !id; // agrego variable para identificar si es creacion o edicion de cliente   
+    const isCreatingNewClient = !id; 
 
-
-    const [ isLoading, setIsLoading ] = useState(false);
     const [ title, setTitle ] = useState('Agregar Cliente');
 
     const validGenders = ['masculino', 'femenino', 'otro'];
-    
+
+
     const onSubmit = async (data) => {
+
       setIsLoading(true);
 
       const dataToSend ={
@@ -29,44 +29,41 @@ export const AddEditClientView = () => {
           gender: data.gender.toLowerCase()
         }
 
-      if(isCreateMode){       
-
-        console.log(dataToSend);
+      if( isCreatingNewClient ){       
 
         const resp = await createNewClient( dataToSend );
 
         if( resp.status === 201 ) {
           addClientContext( resp.data );
           await Swal.fire({
-            title:'Exito!',
-            text:'El cliente fue creado correctamente',
-            icon:'success',
             confirmButtonColor: 'grey',
             confirmButtonText: 'OK',
+            icon:'success',
+            text:'El cliente fue creado correctamente',
+            title:'Exito!',
           });
           setIsLoading(false);
           navigate('/');
         } else {
           setIsLoading(false);
         }
-      }else{      
-      
+      } else {      
         const resp = await updateClient( id, dataToSend );
         if( resp.status === 200 ) {
           editClientContext( parseInt(id), dataToSend );
           await Swal.fire({
-            title:'Exito!',
-            text:'El cliente fue editado correctamente',
-            icon:'success',
             confirmButtonColor: 'grey',
             confirmButtonText: 'OK',
+            icon:'success',
+            text:'El cliente fue editado correctamente',
+            title:'Exito!',
           });
           setIsLoading(false);
+          setSearchedClient([]);
           navigate('/');
         } else {
           setIsLoading(false);
         }
-
       }
     };
 
@@ -75,20 +72,13 @@ export const AddEditClientView = () => {
       navigate('/');
     };
 
+    
+
     const handleDelete = async () => {
       setIsLoading(true);
-      await Swal.fire({
-        title:'¿Estas seguro de eliminar el cliente?',
-        text:'Una vez eliminado no podrás volver a visualizarlo',
-        icon:'warning',
-        showCancelButton:true,
-        confirmButtonColor: 'grey',
-        cancelButtonColor: 'red',
-        confirmButtonText: 'Si Eliminar!',
-        cancelButtonText: 'Cancelar',
-      }).then(async (result) => {
-        console.log('ok');
-        if (result.isConfirmed) {
+
+      await confirmDeleteAlert().then( async ( result ) => {
+        if ( result?.isConfirmed ) {
           const resp = await deleteClient( id );
           if ( !resp ) {
             setIsLoading(false);
@@ -100,13 +90,8 @@ export const AddEditClientView = () => {
           }
           if( resp.status === 200 ) {
             deleteClientContext( parseInt(id) );
-            await Swal.fire({
-              title:'Eliminado!',
-              text:'El cliente fue eliminado correctamente',
-              icon:'success',
-              confirmButtonColor: 'grey',
-              confirmButtonText: 'OK',
-            });
+            clientSuccessfullyRemovedAlert();
+            setSearchedClient([]);
             setIsLoading(false);
             navigate('/');
           }
@@ -116,112 +101,139 @@ export const AddEditClientView = () => {
               'Error!',
               'No se encontro el recurso solicitado',
               'error'
-            ).then(navigate(-1));
+            ).then(navigate('/'));
           }
         }
       })
     };
 
     useEffect( () => {
-      if ( !isCreateMode ) {    
+      if ( !isCreatingNewClient ) {    
         ( async () => {          
-            const {data} = await getClientById( id ); 
-            setValue('name', data.name);
-            setValue('lastname', data.lastname);
-            setValue('gender', data.gender);
-            setValue('phone', data.phone);
-            setValue('dni', data.dni);
-
-            setTitle(`Editar Cliente ${data.id}: ${data.name} ${data.lastname}`);
+          const {data} = await getClientById( id ); 
+          setTitle(`Editar Cliente ${data.id}: ${data.name} ${data.lastname}`);
+          setValue('dni', data.dni);
+          setValue('gender', data.gender);
+          setValue('lastname', data.lastname);
+          setValue('name', data.name);
+          setValue('phone', data.phone);
         } )();
       }
     }, [] );
+
+    const confirmDeleteAlert = async () => {
+     const response = await Swal.fire({
+        cancelButtonColor: 'red',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: 'grey',
+        confirmButtonText: 'Si Eliminar!',
+        icon:'warning',
+        showCancelButton:true,
+        text:'Una vez eliminado no podrás volver a visualizarlo',
+        title:'¿Estas seguro de eliminar el cliente?',
+      });
+      setIsLoading( false );
+      return response;
+    };
+
+    const clientSuccessfullyRemovedAlert = async () => {
+      return await Swal.fire({
+        confirmButtonColor: 'grey',
+        confirmButtonText: 'OK',
+        icon:'success',
+        text:'El cliente fue eliminado correctamente',
+        title:'Eliminado!',
+      });
+    }
      
     return (
       <div className='container mt-3'>
         <h2>{ title }</h2>
         <hr></hr>
-        <div className="container border shadow mt-5 w-50">
-          
-          <form onSubmit={handleSubmit(onSubmit)}>
-
-            <div className="row justify-content-md-center mt-3">
-              <div className="col-md-auto form-group m-2">
-                <label>Nombre</label>
-                <input
-                  name='name'
-                  {...register("name")} 
-                  type="text" 
-                  className="form-control"/>
-              </div>
-
-              <div className="col-md-auto form-group m-2">
-                <label>Apellido</label>
-                <input 
-                  name='lastname'
-                  {...register("lastname")}
-                  type="text" 
-                  className="form-control"
-                />
+        <div className="container border shadow mt-5 p-3 w-50">
+          <form className='row g-3' onSubmit={handleSubmit(onSubmit)}>
+            
+            <div className="col-md-6">
+              <label>Nombre</label>
+              <input
+                name='name'
+                {...register("name", { required: true, minLength: 3 })} 
+                type="text" 
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+              />
+              <div id="name" className="invalid-feedback">
+                  Ingrese un nombre válido.
               </div>
             </div>
 
-            <div className="row justify-content-md-center">
-
-              <div className="col form-group m-2">
-                <label>Sexo</label>
-                <select 
-                  name='gender'
-                  className="form-control" 
-                  {...register("gender")}
-                >                  
-                  { validGenders.map( ( value ) => (
-                      <option key={ value } value={ value }>{ value }</option>
-                  ))}                  
-                </select>
-
-              </div> 
-
-              <div className="col-sm-auto form-group m-2">
-                <label>Numero de telefono</label>
-                <input
-                  name='phone'
-                  {...register("phone")} 
-                  type="text" 
-                  className="form-control"
-                />
+            <div className="col-md-6">
+              <label>Apellido</label>
+              <input 
+                {...register("lastname", { required: true, minLength: 3 })} 
+                className={`form-control ${errors.lastname ? "is-invalid" : ""}`}
+                name='lastname'
+                type="text" 
+              />
+              <div id="name" className="invalid-feedback">
+                    Ingrese un apellido válido.
               </div>
-
-              <div className="col-md form-group m-2">
-                <label>DNI</label>
-                <input
-                  name='dni'
-                  {...register("dni")} 
-                  type="text" 
-                  className="form-control"/>
-              </div>
-
             </div>
-          
-            <div className="row d-flex justify-content-around">
+
+            <div className="col-md-4">
+              <label>DNI</label>
+              <input
+                name='dni'
+                {...register("dni", { required: true, maxLength: 10, minLength: 7 })} 
+                className={`form-control ${errors.dni ? "is-invalid" : ""}`}
+                type="text" 
+              />
+              <div id="name" className="invalid-feedback">
+                    Ingrese un DNI válido.
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <label>Sexo</label>
+              <select 
+                {...register("gender")}
+                className="form-select" 
+                name='gender'
+              >                  
+                { validGenders.map( ( value ) => (
+                    <option key={ value } value={ value }>{ value }</option>
+                ))}                  
+              </select>
+            </div> 
+
+            <div className="col-md-4">
+              <label>Teléfono</label>
+              <input
+                {...register("phone", { required: true })} 
+                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                name='phone'
+                type="text" 
+              />
+              <div id="phone" className="invalid-feedback">
+                    Ingrese un teléfono válido.
+              </div>
+
+            </div>          
+
+            <div className="row d-flex justify-content-between mt-2">
               {
-                ( !isCreateMode ) 
-                  ? <div className="col-lg form-group">
-                      <button disabled={isLoading} onClick={ () => handleDelete() } type="button" className="btn btn-danger m-3">Eliminar</button>
+                ( !isCreatingNewClient ) 
+                  ? <div className="col-md-3 m-2">
+                      <button disabled={isLoading} onClick={ () => handleDelete() } type="button" className="btn btn-danger">Eliminar</button>
                     </div>
                   : null
               }
-              
               <div className="col-md-auto form-group">
-              <button disabled={isLoading} className="btn btn-outline-success m-3">Guardar</button>
-              <button disabled={isLoading} onClick={handleCancel} type="button" className="btn btn-secondary m-3">Cancelar</button>
+                <button disabled={isLoading} className="btn btn-outline-success m-2">Guardar</button>
+                <button disabled={isLoading} onClick={handleCancel} type="button" className="btn btn-secondary m-2">Cancelar</button>
               </div>
             </div>
-
           </form>
         </div>
-
       </div>
-      
     );
 }
