@@ -6,7 +6,9 @@ export const ClientsListView = ( { clients }) => {
 
   return (   
   <>
-        <div className="container mt-5">
+        <div className="container mt-3">
+            <h2>Listado de clientes</h2>
+            <hr></hr>
             <table className="table table-bordered shadow">
                 <thead className="table-light">
                     <tr>
