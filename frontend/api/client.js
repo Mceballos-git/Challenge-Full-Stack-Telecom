@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-
 const publicClient = axios.create( {
     baseURL: import.meta.env.VITE_REACT_APP_API_BASE_URL,
     headers: {
@@ -26,7 +25,7 @@ const publicGET = async ( path ) => {
     if (error.response.status === 404) {
       return Swal.fire(
         'Error!',
-        'No se encontro el recurso solicitado.',
+        'No se encontro el cliente solicitado.',
         'error'
       );
     }
@@ -110,9 +109,9 @@ const publicDELETE = async ( path ) => {
 };
 
 
-export const getAllClients = async () => await publicGET( '/clients' );
+export const getAllClients = async ( limit, offset ) => await publicGET( `/clients?limit=${limit}&offset=${offset}` );
 export const getClientById = async ( id ) => await publicGET( `/clients/${id}` );
-export const getClientByDni = async ( id ) => await publicPOST( `/clients/search/${id}` );
+export const getClientByDni = async ( id ) => await publicGET( `/clients/search/${id}` );
 export const createNewClient = async ( data ) => await publicPOST( `/clients`, data );
 export const updateClient = async ( id, data ) => await publicPATCH( `/clients/${id}`, data );
 export const deleteClient = async ( id ) => await publicDELETE( `/clients/${id}` );
