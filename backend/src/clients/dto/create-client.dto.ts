@@ -17,7 +17,7 @@ export class CreateClientDto {
   @IsPositive()
   dni: number
 
-  @IsIn(['masculino', 'femenino'])
+  @IsIn(['masculino', 'femenino', 'otro'])
   gender: string
 
 }
