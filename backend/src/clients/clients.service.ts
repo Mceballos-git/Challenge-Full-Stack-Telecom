@@ -30,7 +30,7 @@ export class ClientsService {
 
   async findAll( paginationDto: PaginationDto ): Promise<Client[]> {
 
-    const { limit = 10, offset = 0 } = paginationDto;
+    const { limit = 0, offset = 0 } = paginationDto;
 
     return await this.userRepository.find({
       take: limit,
@@ -48,7 +48,6 @@ export class ClientsService {
 
   async findOneByDocument(term: number) {
     const client = await this.userRepository.find({where: { dni: term }})
-    console.log(client);
     if ( client.length === 0 ) {
       throw new NotFoundException(`Client with dni ${ term } not found`);
     }
