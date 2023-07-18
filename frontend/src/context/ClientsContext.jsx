@@ -7,15 +7,17 @@ export const ClientsContext = createContext();
 export const ClientsProvider = ({ children }) => {    
 
   const [ clients, setClients ] = useState([]);
+  const [ searchedClient, setSearchedClient ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState( false );
   
 
   const addClientContext = async (data) => {
-    setClients([ ...clients, data]);
+    setClients([ data, ...clients ]);
   }
 
   const editClientContext = async (id, data) => {
-      data = {...data, id};
-      setClients(clients => clients.map((client) => (client.id === id ? data : client)));           
+    data = {...data, id};
+    setClients(clients => clients.map((client) => (client.id === id ? data : client)));           
   }
   
   const deleteClientContext = ( id ) => {
@@ -24,16 +26,19 @@ export const ClientsProvider = ({ children }) => {
 
   useEffect(() => {
     ( async () => {
-        const { data } = await getAllClients();
-        setClients( data );        
+        setIsLoading( true );
+        const { data } = await getAllClients(10,0);
+        setClients( data.reverse() );
+        setIsLoading( false );
       })();
   }, [])
-  
-
-  
 
   return (
     <ClientsContext.Provider value={{
+      searchedClient,
+      setSearchedClient,
+      isLoading, 
+      setIsLoading,
       clients,
       addClientContext,
       deleteClientContext,
