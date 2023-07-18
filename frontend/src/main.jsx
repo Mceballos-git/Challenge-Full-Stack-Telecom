@@ -1,17 +1,14 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import RootPage from "./views/root";
-import ErrorPage from "./views/ErrorPage";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
+import { createBrowserRouter,  RouterProvider} from 'react-router-dom';
+import RootPage from './clients/views/root';
+import ErrorPage from './clients/pages/ErrorPage';
+import { ClientsPage } from './clients/pages/ClientsPage';
 
-import "./styles.css";
-import { ClientsListView } from "./views/ClientsListView";
-import { AddEditClientView } from "./views/AddEditClientView";
+import './styles.css';
 
-import { ClientsProvider } from './context/ClientsContext'
+import { ClientsProvider } from './context/ClientsContext';
+import { AddEditClientView } from './clients/views/AddEditClientView';
 
 
 const router = createBrowserRouter([
@@ -22,7 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ClientsListView />,
+        element: <ClientsPage />,
       },
       {
         path: "/create",
