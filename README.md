@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://brandemia.org/contenido/subidas/2021/10/05-telecom-argentina-1200x670.jpg" width="400" alt="Nest Logo" /></a>
+  <a target="blank"><img src="https://brandemia.org/contenido/subidas/2021/10/05-telecom-argentina-1200x670.jpg" width="400" alt="Telecom" /></a>
 </p>
 
 
@@ -54,7 +54,7 @@ npm install
 ```
 5. Poner a correr el proyecto en el puerto 3000.
 ```
-npm start
+npm run start:dev
 ```
 
 
