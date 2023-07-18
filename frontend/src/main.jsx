@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter,  RouterProvider} from 'react-router-dom';
-import RootPage from './clients/views/root';
+import RootPage from './clients/pages/RootPage';
 import ErrorPage from './clients/pages/ErrorPage';
 import { ClientsPage } from './clients/pages/ClientsPage';
 
