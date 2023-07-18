@@ -4,7 +4,6 @@ export default function ErrorPage() {
   const error = useRouteError();
 
   return (
-
     <div id="error-page" className="card text-center">
       <div className="card-header">
         <h1>Oops!</h1>
@@ -15,7 +14,7 @@ export default function ErrorPage() {
         <i>{error.statusText || error.message}</i>
       </div>
       <div className="card-footer text-body-secondary">
-        <a href="#" className="btn btn-primary">Regresar al Home</a>
+        <a href="/" className="btn btn-primary">Regresar al Home</a>
       </div>
     </div>
   );
