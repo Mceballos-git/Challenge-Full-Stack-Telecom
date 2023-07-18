@@ -13,7 +13,7 @@ export const Navbar = () => {
             <Link className="nav-link" to={`/`}>Listado de clientes</Link>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to={`/create`}>Agregar cliente</Link>
+            <Link reloadDocument className="nav-link" to={`/create`}>Agregar cliente</Link>
           </li>
         </ul>
       </div>
