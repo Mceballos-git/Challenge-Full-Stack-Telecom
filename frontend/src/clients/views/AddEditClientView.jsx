@@ -1,20 +1,61 @@
 import { useEffect, useContext, useState } from 'react';
-import { ClientsContext } from '../context/ClientsContext';
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteClient, getClientById } from '../../api/client';
 import Swal from 'sweetalert2';
+import { ClientsContext } from '../../context/ClientsContext';
+import { createNewClient, deleteClient, getClientById } from '../../../api/client';
 
 
 export const AddEditClientView = () => {
 
-    const { deleteClientContext, setClients, clients } = useContext( ClientsContext );
-    const { register, handleSubmit, setValue } = useForm();
+    const { deleteClientContext, addClientContext } = useContext( ClientsContext );
+    const { register, handleSubmit, setValue, reset} = useForm();
     const [ isLoading, setIsLoading ] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
     
-    const onSubmit = data => console.log(data);
+    const onSubmit = async (data) => {
+
+      const toSend ={
+        ...data,
+        dni: parseInt(data.dni),
+        gender: data.gender.toLowerCase()
+      }
+
+
+      const resp = await createNewClient( toSend );
+      console.log(resp);
+      if ( !resp ) {
+        setIsLoading(false);
+        return Swal.fire(
+          'Error!',
+          'Se produjo un error de conexión, por favor reintente nuevamente',
+          'error'
+        );
+      }
+      if( resp.status === 201 ) {
+        addClientContext( resp.data );
+        await Swal.fire({
+          title:'Exito!',
+          text:'El cliente fue creado correctamente',
+          icon:'success',
+          confirmButtonColor: 'grey',
+          confirmButtonText: 'OK',
+        });
+        setIsLoading(false);
+        navigate('/');
+      }
+      if ( resp.status === 400 ) {
+        setIsLoading(false);
+        return Swal.fire(
+          'Error!',
+          'Se produjo un error, por favor verifique los datos ingresados',
+          'error'
+        ).then(navigate(-1));
+
+
+      }
+     };
 
     const handleCancel = () => {
       setIsLoading(false);
@@ -57,7 +98,7 @@ export const AddEditClientView = () => {
             setIsLoading(false);
             navigate(-1);
           }
-          if ( resp.status == 404 ) {
+          if ( resp.status === 404 ) {
             setIsLoading(false);
             return Swal.fire(
               'Error!',
@@ -72,16 +113,17 @@ export const AddEditClientView = () => {
     };
 
     useEffect( () => {
+      if ( id !== undefined ) {  
       ( async () => {
-        if ( id !== undefined ) {  
+        
           const {data} = await getClientById( id ); 
           setValue('name', data.name);
           setValue('lastname', data.lastname);
           setValue('sexo', data.gender);
           setValue('phone', data.phone);
           setValue('dni', data.dni);
-        }
       } )();
+    }
   }, [] );
     
      
@@ -147,10 +189,15 @@ export const AddEditClientView = () => {
           </div>
          
 
-          <div className="row justify-content-md-start">
-            <div className="col-lg form-group">
-              <button disabled={isLoading} onClick={ () => handleDelete() } type="button" className="btn btn-danger m-3">Eliminar</button>
-            </div>
+          <div className="row d-flex justify-content-around">
+            {
+              ( id !== undefined ) 
+                ? <div className="col-lg form-group">
+                    <button disabled={isLoading} onClick={ () => handleDelete() } type="button" className="btn btn-danger m-3">Eliminar</button>
+                  </div>
+                : null
+            }
+            
             <div className="col-md-auto form-group">
             <button disabled={isLoading} className="btn btn-outline-success m-3">Guardar</button>
             <button disabled={isLoading} onClick={handleCancel} type="button" className="btn btn-secondary m-3">Cancelar</button>

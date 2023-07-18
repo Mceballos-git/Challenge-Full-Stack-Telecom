@@ -1,11 +1,8 @@
-import { useContext } from 'react';
-import { ClientsContext } from '../context/ClientsContext';
-import { Link  } from "react-router-dom"
+
+import { Link  } from 'react-router-dom';
 
 
-export const ClientsListView = () => {
-  
-  const { clients } = useContext( ClientsContext ); 
+export const ClientsListView = ( { clients }) => {  
 
   return (   
   <>
