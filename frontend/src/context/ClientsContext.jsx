@@ -7,17 +7,13 @@ export const ClientsContext = createContext();
 export const ClientsProvider = ({ children }) => {    
 
   const [ clients, setClients ] = useState([]);
-  // const [ activeClient, setActiveclient ] = useState([]);
+  
 
-  // const handleGetAllClients = async () => {
-  //   const { data } = await getAllClients();
-  //   setClients( data );
-  // };
+  const addClientContext = async (data) => {
+    setClients([ ...clients, data]);
+  }
 
-  // const handleGetClientById = async ( id ) => {
-  //   const { data } = await getClientById( id );
-  //   setActiveclient( data );
-  // };
+
   const editClient = async (id, data) => {
       clients.map((client) => {
         if( client.id === id){
@@ -48,6 +44,7 @@ export const ClientsProvider = ({ children }) => {
   return (
     <ClientsContext.Provider value={{
       clients,
+      addClientContext,
       deleteClientContext,
       editClient
     }}>
