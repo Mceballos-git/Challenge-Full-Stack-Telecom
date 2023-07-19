@@ -16,14 +16,14 @@ Aplicación Web para gestión de clientes.
 ### Frontend
 - [Instrucciones de ejecución frontend](#instrucciones-de-ejecución-frontend)
 - [Datos técnicos](#datos-tecnicos-1)
-<br>
+
 ---
 
 ### Instalaciones necesarias backend
 - [Debes tener GIT instalado](https://git-scm.com/)
 - [Debes tener MySql instalado](https://dev.mysql.com/downloads/)
 - [Debes tener Node/npm instalado](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-<br>
+
 ---
 ### Instrucciones de ejecución backend
 
