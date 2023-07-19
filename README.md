@@ -14,8 +14,8 @@ Aplicación Web para gestión de clientes.
 - [Datos tecnicos](#datos-tecnicos)
 
 ### Frontend
-- Instrucciones de ejecución frontend
-- Datos técnicos
+- [Instrucciones de ejecución frontend](#instrucciones-de-ejecución-frontend)
+- [Datos técnicos](#datos-tecnicos-1)
 <br>
 ---
 
@@ -36,25 +36,26 @@ git clone https://github.com/Mceballos-git/Challenge-Full-Stack-Telecom.git
 ```
 2. Crear la base de datos a la cual se conectara la aplicación.<br>
   Para esto es necesario que importes el archivo `challengedb.sql` que se encuentra dentro del directorio `{install_dir}/backend/database`.<br>
-  A esto puedes hacerlo con MySqlWorkbench o desde tu gestor preferido.<br>
-  Para más información sobre como crear una base de datos a partir de un archivo `.sql`, click [aquí.](https://dev.mysql.com/doc/workbench/en/wb-admin-export-import-management.html)
+  A esto puedes hacerlo con MySQL Workbench o desde tu gestor preferido.<br>
+  Para más información sobre como crear una base de datos a partir de un archivo SQL,  con MySQL Workbench, click [aquí.](https://linuxhint.com/import-and-run-sql-script-file-in-mysql-workbench/)
 
 
 
-3. Cargar tus credenciales de usuario de acceso a MySql en el archivo `.env.template`, que se encuentra en la raíz del directorio backend.
+3. Cargar tus credenciales de usuario de acceso a MySql Server en el archivo `.env.template`, que se encuentra en la raíz del directorio backend.
 ```
 DB_USERNAME={NombreDeUsuario}
 DB_PASSWORD={Contraseña}
 ```
 3. Renombrar el archivo `.env.template`  a `.env`
 
-4. Instalar las dependencias del proyecto
+4. Instalar las dependencias del proyecto.<br>
+Abrir una terminal dentro de la carpeta backend y ejecutar el siguiente comando:
 ```
 npm install
 ```
 5. Poner a correr el proyecto en el puerto 3000.
 ```
-npm run start:dev
+npm run start
 ```
 
 
@@ -76,10 +77,37 @@ Si desea ver más detalles sobre los endpoints, por favor click [aqui](https://d
 
 ---
 ### Datos tecnicos
-- Se utilizó NestJS, esto permite ahorrar tiempo y tener una arquitectura tanto mantenible como escalable.
-- Se utilizó MySql como base de datos relacional para el proyecto.<br>
+- Se utilizó NestJS, esto permite tener una arquitectura mas mantenible y escalable ahorrando tiempo de desarrollo. 
+- Se utilizó MySql como base de datos relacional para el proyecto.
 - Se utilizó TypeORM para la reducción de código en comparación con las técnicas tradicionales de acceso a datos.
 - Se implementó paginación en los resultados a devolver, por cuestiones de performance tanto de backend como frontend.
+
+---
+### Instrucciones de ejecución frontend
+
+1. Instalar las dependencias del proyecto.<br>
+Abrir una terminal dentro de la carpeta frontend y ejecutar el siguiente comando:
+```
+npm install
+```
+2. Renombrar el archivo .env.template a .env
+2. Levantar la aplicacion
+```
+npm run dev
+```
+3. Abrir un navegador y escribir la siguiente direccion URL
+```
+http://localhost:5173
+```
+---
+### Datos tecnicos
+  - Se creó la aplicacion con Vite, ya que provee una mejor experiencia de desarrollo.
+  - Se utilizó la ultima version hasta el momento de React, v18.2
+  - Se utilizó Axios para realizar llamadas http al backend.
+  - Se utilizó la libreria SweetAlert2 para mostrar alerts con mensajes al  usuario.
+  - Se maneja el estado de la aplicación utilizando el hook useContext nativo de React.
+  - Se utilizó Bootstrap 5 para manejar los estilos.
+  
 
 
 
