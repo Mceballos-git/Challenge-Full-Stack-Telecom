@@ -47,7 +47,7 @@ export const Navbar = () => {
             placeholder="Buscar por DNI"
           />
             { isLoading ? (
-            <button class="btn btn-outline-info" disabled>
+            <button className="btn btn-outline-info" disabled>
               {/* <span class="spinner-border spinner-border-sm"></span> */}
               Cargando...
             </button>
