@@ -28,7 +28,7 @@ export const ClientsProvider = ({ children }) => {
     ( async () => {
         setIsLoading( true );
         const { data } = await getAllClients(10,0);
-        setClients( data.reverse() );
+        setClients( data?.reverse() );
         setIsLoading( false );
       })();
   }, [])
