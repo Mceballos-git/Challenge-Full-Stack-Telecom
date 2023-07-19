@@ -1,26 +1,65 @@
 
 import { useEffect, useContext, useState } from 'react';
 import { ClientsContext } from '../../context/ClientsContext';
+import { getAllClients } from '../../../api/client'
 
 import { Link  } from 'react-router-dom';
 
 
-export const ClientsListView = ({ clients }) => {  
+export const ClientsListView = () => {  
 
-  const { searchedClient } = useContext( ClientsContext );
-
+  const { searchedClient, clients } = useContext( ClientsContext );
   const [ renderedClients, setRenderedClients ] = useState([]);
+  const [ disablePrevButton, setDisablePrevButton ] = useState( false );
+  const [ disableNextButton, setDisableNextButton ] = useState( false );
+  const [ currentPage, setCurrentPage ] = useState(0);
+  const [ offset, setOffset ] = useState(0);
+
 
   useEffect(() => {
       ( searchedClient.length === 0 ) ? setRenderedClients(clients) : setRenderedClients(searchedClient);
   }, [searchedClient])
 
+  useEffect(() => {
+    // Si estamos la pagina 0, desactivo el boton PrevPage
+    ( currentPage < 1 ) ? setDisablePrevButton( true ) : setDisablePrevButton( false );
+
+    // Si estamos en otra pagina que no sea la primera y se muestran menos de 10 clientes
+    // desactivo el boton NextPage
+    ( currentPage !== 0 && renderedClients.length < 10 ) ? setDisableNextButton( true ) : setDisableNextButton( false );
+
+    // Si estamos en la primer pagina y se muestran menos de 10 clientes
+    // desactivo el boton NextPage
+    ( currentPage === 0 && renderedClients.length < 10 ) ? setDisableNextButton( true ) : null;
+    // console.log('currentPage', currentPage);
+    // console.log('clients.length', clients.length);
+    // console.log('offset', offset);
+    // console.log('renderedClients', renderedClients);
+  }, [renderedClients])
+
+  
+  const handlePrevPage = async () => {
+    const { data } = await getAllClients( 10, offset - 10 );
+    if ( currentPage >= 1 ) setCurrentPage( currentPage - 1 );
+    if ( offset !== 0 ) setOffset( offset - 10 );
+    setRenderedClients( data.reverse() );
+  }
+
+  const handleNextPage = async () => {
+    setCurrentPage( currentPage + 1 );
+    const { data } = await getAllClients( 10, offset + 10 );
+    setOffset( offset + 10 );
+    setRenderedClients( data.reverse() );
+  }
 
   return (   
 
    <>
     <div className="container mt-3">
+      
       <h2>Listado de clientes</h2>
+      <button className='btn btn-primary m-2' onClick={ handlePrevPage } disabled={disablePrevButton}>Página anterior</button>
+      <button className='btn btn-primary m-2' onClick={ handleNextPage } disabled={disableNextButton}>Página siguiente</button>
       <hr></hr>
       <table className="table table-bordered shadow">
         <thead className="table-light">
