@@ -32,10 +32,10 @@ export const Navbar = () => {
       <a className="navbar-brand" href="#">Clients App</a>
         <ul className="navbar-nav">
           <li className="nav-item active">
-            <Link className="nav-link" to={`/`}>Listado de clientes</Link>
+            <Link className="border border-info rounded m-2 nav-link" to={`/`}>Listado de clientes</Link>
           </li>
           <li className="nav-item active">
-            <Link reloadDocument className="nav-link" to={`/create`}>Agregar cliente</Link>
+            <Link reloadDocument className="border border-info rounded m-2 nav-link" to={`/create`}>Agregar cliente</Link>
           </li>
         </ul>
         <form onSubmit={handleSubmit(onSubmit)} className="d-flex" role="search">
