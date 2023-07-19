@@ -16,7 +16,7 @@ export const ClientsPage = () => {
             ? <LoadingSpinner/>
             : (clients.length === 0 ) 
               ? <NoClientsView/>
-              : <ClientsListView clients = { clients }/>
+              : <ClientsListView/>
         }        
     </>
   )
