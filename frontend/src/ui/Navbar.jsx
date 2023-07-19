@@ -29,7 +29,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
     <div className="container-fluid">
-      <a className="navbar-brand" href="#">Clients App</a>
+      <a className="navbar-brand" href="/">Clients App</a>
         <ul className="navbar-nav">
           <li className="nav-item active">
             <Link className="border border-info rounded m-2 nav-link" to={`/`}>Listado de clientes</Link>
