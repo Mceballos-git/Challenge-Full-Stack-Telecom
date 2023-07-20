@@ -11,11 +11,11 @@ Aplicación Web para gestión de clientes.
 - [Instalaciones necesarias backend](#instalaciones-necesarias-backend)
 - [Instrucciones de ejecución backend](#instrucciones-de-ejecucion-backend)
 - [API Endpoints](#api-endpoints)
-- [Datos tecnicos](#datos-tecnicos)
+- [Datos tecnicos backend](#datos-tecnicos-backend)
 
 ### Frontend
 - [Instrucciones de ejecución frontend](#instrucciones-de-ejecución-frontend)
-- [Datos técnicos](#datos-tecnicos-1)
+- [Datos técnicos frontend](#datos-tecnicos-frontend)
 
 ---
 
@@ -73,10 +73,10 @@ npm run start
 
 <br>
 
-Si desea ver más detalles sobre los endpoints, por favor click [aqui](https://documenter.getpostman.com/view/7251380/2s946fdsZB#f42faebd-686f-4215-8059-8ab13ac6a416 )
+Si desea ver más detalles sobre los endpoints, por favor click [aqui](https://documenter.getpostman.com/view/7251380/2s946fdsZB )
 
 ---
-### Datos tecnicos
+### Datos tecnicos backend
 - Se utilizó NestJS, esto permite tener una arquitectura mas mantenible y escalable ahorrando tiempo de desarrollo. 
 - Se utilizó MySql como base de datos relacional para el proyecto.
 - Se utilizó TypeORM para la reducción de código en comparación con las técnicas tradicionales de acceso a datos.
@@ -100,7 +100,7 @@ npm run dev
 http://localhost:5173
 ```
 ---
-### Datos tecnicos
+### Datos tecnicos frontend
   - Se creó la aplicacion con Vite, ya que provee una mejor experiencia de desarrollo.
   - Se utilizó la ultima version hasta el momento de React, v18.2
   - Se utilizó Axios para realizar llamadas http al backend.
