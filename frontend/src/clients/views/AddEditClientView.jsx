@@ -8,7 +8,15 @@ import { createNewClient, deleteClient, getClientById, updateClient } from '../.
 
 export const AddEditClientView = () => {
 
-    const { deleteClientContext, addClientContext, editClientContext, isLoading, setIsLoading, setSearchedClient } = useContext( ClientsContext );
+    const { 
+      deleteClientContext, 
+      addClientContext, 
+      editClientContext, 
+      isLoading, 
+      setIsLoading, 
+      setSearchedClient,
+      setIsCreatingOrEditingClient } = useContext( ClientsContext );
+
     const { register, handleSubmit, setValue, formState: { errors }} = useForm();
     const [ title, setTitle ] = useState('Agregar Cliente');
     const navigate = useNavigate();    
@@ -23,19 +31,14 @@ export const AddEditClientView = () => {
     };
 
     const onSubmit = async (data) => {
-
       setIsLoading(true);
-
       const dataToSend ={
           ...data,
           dni: parseInt(data.dni),
           gender: data.gender.toLowerCase()
         }
-
       if( isCreatingNewClient ){       
-
         const resp = await createNewClient( dataToSend );
-
         if( resp.status === 201 ) {
           addClientContext( resp.data );
           await Swal.fire({
@@ -70,13 +73,6 @@ export const AddEditClientView = () => {
       }
     };
 
-    const handleCancel = () => {
-      setIsLoading(false);
-      navigate('/');
-    };
-
-    
-
     const handleDelete = async () => {
       setIsLoading(true);
 
@@ -99,18 +95,25 @@ export const AddEditClientView = () => {
             navigate('/');
           }
           if ( resp.status === 404 ) {
-            setIsLoading(false);
-            return Swal.fire(
+            Swal.fire(
               'Error!',
               'No se encontro el recurso solicitado',
               'error'
-            ).then(navigate('/'));
+            );
+            setIsLoading(false);
+            navigate('/')
           }
         }
       })
     };
 
+    const handleCancel = () => {
+      setIsLoading(false);
+      navigate('/');
+    };
+
     useEffect( () => {
+      setIsCreatingOrEditingClient( true );
       if ( !isCreatingNewClient ) {    
         ( async () => {          
           const {data} = await getClientById( id ); 
@@ -151,7 +154,7 @@ export const AddEditClientView = () => {
      
     return (
       <div className='container mt-3'>
-        <h2>{ title }</h2>
+        <h3>{ title }</h3>
         <hr></hr>
         <div className="container border shadow mt-5 p-3 w-50">
           <form className='row g-3' onSubmit={handleSubmit(onSubmit)}>
