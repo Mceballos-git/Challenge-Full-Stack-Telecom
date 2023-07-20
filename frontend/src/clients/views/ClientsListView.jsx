@@ -8,7 +8,7 @@ import { Link  } from 'react-router-dom';
 
 export const ClientsListView = () => {  
 
-  const { searchedClient, clients } = useContext( ClientsContext );
+  const { searchedClient, clients, setIsCreatingOrEditingClient } = useContext( ClientsContext );
   const [ renderedClients, setRenderedClients ] = useState([]);
   const [ disablePrevButton, setDisablePrevButton ] = useState( false );
   const [ disableNextButton, setDisableNextButton ] = useState( false );
@@ -21,6 +21,8 @@ export const ClientsListView = () => {
   }, [searchedClient])
 
   useEffect(() => {
+    setIsCreatingOrEditingClient( false );
+    
     // Si estamos la pagina 0, desactivo el boton PrevPage
     ( currentPage < 1 ) ? setDisablePrevButton( true ) : setDisablePrevButton( false );
 
@@ -38,7 +40,7 @@ export const ClientsListView = () => {
     const { data } = await getAllClients( 10, offset - 10 );
     if ( currentPage >= 1 ) setCurrentPage( currentPage - 1 );
     if ( offset !== 0 ) setOffset( offset - 10 );
-    setRenderedClients( data.reverse() );
+    setRenderedClients( data );
   }
 
   const handleNextPage = async () => {
@@ -46,18 +48,32 @@ export const ClientsListView = () => {
     const { data } = await getAllClients( 10, offset + 10 );
     if ( data.length !== 0 ) {
       setOffset( offset + 10 );
-      setRenderedClients( data.reverse() );
-    } else { setDisableNextButton( true ) }
+      setRenderedClients( data);
+    } else { setDisableNextButton( true ) } 
+    // Si ya no viene mas data, desactivo el boton NextPage
   }
 
   return (   
 
    <>
     <div className="container mt-3">
-      
-      <h2>Listado de clientes</h2>
-      <button className='btn btn-primary m-2' onClick={ handlePrevPage } disabled={disablePrevButton}>Página anterior</button>
-      <button className='btn btn-primary m-2' onClick={ handleNextPage } disabled={disableNextButton}>Página siguiente</button>
+      <h3>Listado de clientes</h3>
+      <div className='d-flex justify-content-center'>
+        <button 
+          className='btn btn-outline-primary btn-sm m-2' 
+          onClick={ handlePrevPage } 
+          disabled={disablePrevButton}
+        >
+          Página anterior
+        </button>
+        <button 
+          className='btn btn-outline-primary btn-sm m-2' 
+          onClick={ handleNextPage } 
+          disabled={disableNextButton}
+        >
+          Página siguiente
+        </button>
+      </div>
       <hr></hr>
       <table className="table table-bordered shadow">
         <thead className="table-light">
