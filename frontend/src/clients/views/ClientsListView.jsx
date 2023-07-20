@@ -31,10 +31,6 @@ export const ClientsListView = () => {
     // Si estamos en la primer pagina y se muestran menos de 10 clientes
     // desactivo el boton NextPage
     ( currentPage === 0 && renderedClients.length < 10 ) ? setDisableNextButton( true ) : null;
-    // console.log('currentPage', currentPage);
-    // console.log('clients.length', clients.length);
-    // console.log('offset', offset);
-    // console.log('renderedClients', renderedClients);
   }, [renderedClients])
 
   
@@ -48,8 +44,10 @@ export const ClientsListView = () => {
   const handleNextPage = async () => {
     setCurrentPage( currentPage + 1 );
     const { data } = await getAllClients( 10, offset + 10 );
-    setOffset( offset + 10 );
-    setRenderedClients( data.reverse() );
+    if ( data.length !== 0 ) {
+      setOffset( offset + 10 );
+      setRenderedClients( data.reverse() );
+    } else { setDisableNextButton( true ) }
   }
 
   return (   
