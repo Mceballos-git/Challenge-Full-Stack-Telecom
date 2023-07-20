@@ -46,7 +46,7 @@ git clone https://github.com/Mceballos-git/Challenge-Full-Stack-Telecom.git
 DB_USERNAME={NombreDeUsuario}
 DB_PASSWORD={Contraseña}
 ```
-3. Renombrar el archivo `.env.template`  a `.env`
+3. Renombrar el archivo `.env.template` que se encuentra en la raiz del directorio ```{install_dir}/backend/```  a `.env`
 
 4. Instalar las dependencias del proyecto.<br>
 Abrir una terminal dentro de la carpeta backend y ejecutar el siguiente comando:
@@ -90,12 +90,13 @@ Abrir una terminal dentro de la carpeta frontend y ejecutar el siguiente comando
 ```
 npm install
 ```
-2. Renombrar el archivo .env.template a .env
-2. Levantar la aplicacion
+2. Renombrar el archivo ```.env.template``` que se encuentra en la raiz del directorio ```{install_dir}/frontend/``` a ```.env```<br>
+
+3. Levantar la aplicacion
 ```
 npm run dev
 ```
-3. Abrir un navegador y escribir la siguiente direccion URL
+4. Abrir un navegador y escribir la siguiente direccion URL
 ```
 http://localhost:5173
 ```
@@ -103,7 +104,7 @@ http://localhost:5173
 ### Datos tecnicos frontend
   - Se creó la aplicacion con Vite, ya que provee una mejor experiencia de desarrollo.
   - Se utilizó la ultima version hasta el momento de React, v18.2
-  - Se utilizó Axios para realizar llamadas http al backend.
+  - Se utilizó Axios para realizar llamadas http.
   - Se utilizó la libreria SweetAlert2 para mostrar alerts con mensajes al  usuario.
   - Se maneja el estado de la aplicación utilizando el hook useContext nativo de React.
   - Se utilizó Bootstrap 5 para manejar los estilos.
