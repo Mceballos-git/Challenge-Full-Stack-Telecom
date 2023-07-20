@@ -21,7 +21,7 @@ Aplicación Web para gestión de clientes.
 
 ### Instalaciones necesarias backend
 - [Debes tener GIT instalado](https://git-scm.com/)
-- [Debes tener MySql instalado](https://dev.mysql.com/downloads/)
+- [Debes tener MySql Server v8.0.33 instalado](https://dev.mysql.com/downloads/)
 - [Debes tener Node/npm instalado](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ---
