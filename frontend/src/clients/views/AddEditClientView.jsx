@@ -10,14 +10,17 @@ export const AddEditClientView = () => {
 
     const { deleteClientContext, addClientContext, editClientContext, isLoading, setIsLoading, setSearchedClient } = useContext( ClientsContext );
     const { register, handleSubmit, setValue, formState: { errors }} = useForm();
+    const [ title, setTitle ] = useState('Agregar Cliente');
     const navigate = useNavigate();    
     const { id } = useParams();
     const isCreatingNewClient = !id; 
 
-    const [ title, setTitle ] = useState('Agregar Cliente');
-
     const validGenders = ['masculino', 'femenino', 'otro'];
 
+    const patterns = { 
+      letters: /^[A-Za-z]+/i ,
+      numbers: /^[0-9]+$/i
+    };
 
     const onSubmit = async (data) => {
 
@@ -152,43 +155,62 @@ export const AddEditClientView = () => {
         <hr></hr>
         <div className="container border shadow mt-5 p-3 w-50">
           <form className='row g-3' onSubmit={handleSubmit(onSubmit)}>
-            
             <div className="col-md-6">
               <label>Nombre</label>
               <input
                 name='name'
-                {...register("name", { required: true, minLength: 3 })} 
-                type="text" 
+                type="text"
+                {...register("name", 
+                  { required: true, 
+                    minLength: 3,
+                    maxLength: 20,
+                    pattern: {
+                      value: patterns.letters,
+                    }
+                  })}                 
                 className={`form-control ${errors.name ? "is-invalid" : ""}`}
               />
               <div id="name" className="invalid-feedback">
-                  Ingrese un nombre válido.
+                Sólo letras - mínimo 3 caracteres, maximo 20.
               </div>
             </div>
 
             <div className="col-md-6">
               <label>Apellido</label>
               <input 
-                {...register("lastname", { required: true, minLength: 3 })} 
-                className={`form-control ${errors.lastname ? "is-invalid" : ""}`}
                 name='lastname'
-                type="text" 
+                type="text"
+                {...register("lastname", { 
+                  required: true, 
+                  minLength: 3,
+                  maxLength: 20,
+                  pattern: {
+                    value: patterns.letters
+                  }
+                })} 
+                className={`form-control ${errors.lastname ? "is-invalid" : ""}`}                 
               />
               <div id="name" className="invalid-feedback">
-                    Ingrese un apellido válido.
+                Sólo letras - mínimo 3 caracteres, maximo 20.
               </div>
             </div>
-
             <div className="col-md-4">
               <label>DNI</label>
               <input
                 name='dni'
-                {...register("dni", { required: true, maxLength: 10, minLength: 7 })} 
+                type="text"
+                {...register("dni", 
+                  { required: true, 
+                    maxLength: { value: 8 }, 
+                    minLength: { value: 7 },
+                    pattern: {
+                      value: patterns.numbers
+                    }
+                  })} 
                 className={`form-control ${errors.dni ? "is-invalid" : ""}`}
-                type="text" 
               />
               <div id="name" className="invalid-feedback">
-                    Ingrese un DNI válido.
+                Sólo números, mínimo 7, maximo 8.
               </div>
             </div>
 
@@ -208,17 +230,22 @@ export const AddEditClientView = () => {
             <div className="col-md-4">
               <label>Teléfono</label>
               <input
-                {...register("phone", { required: true })} 
-                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                 name='phone'
-                type="text" 
+                type="text"
+                {...register("phone", 
+                  { required: true,
+                    minLength: 7,
+                    pattern: {
+                      value: patterns.numbers
+                    }
+                  })
+                } 
+                className={`form-control ${errors.phone ? "is-invalid" : ""}`}                 
               />
               <div id="phone" className="invalid-feedback">
-                    Ingrese un teléfono válido.
+                Sólo números, mínimo 7.
               </div>
-
             </div>          
-
             <div className="row d-flex justify-content-between mt-2">
               {
                 ( !isCreatingNewClient ) 
