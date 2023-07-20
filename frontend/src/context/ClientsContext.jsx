@@ -9,6 +9,7 @@ export const ClientsProvider = ({ children }) => {
   const [ clients, setClients ] = useState([]);
   const [ searchedClient, setSearchedClient ] = useState([]);
   const [ isLoading, setIsLoading ] = useState( false );
+  const [ isCreatingOrEditingClient, setIsCreatingOrEditingClient ] = useState( false );
   
 
   const addClientContext = async (data) => {
@@ -28,13 +29,15 @@ export const ClientsProvider = ({ children }) => {
     ( async () => {
         setIsLoading( true );
         const { data } = await getAllClients(10,0);
-        setClients( data?.reverse() );
+        setClients( data );
         setIsLoading( false );
       })();
   }, [])
 
   return (
     <ClientsContext.Provider value={{
+      isCreatingOrEditingClient,
+      setIsCreatingOrEditingClient,
       searchedClient,
       setSearchedClient,
       isLoading, 
