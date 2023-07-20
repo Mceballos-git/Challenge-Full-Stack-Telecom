@@ -30,7 +30,7 @@ export const ClientsListView = () => {
 
     // Si estamos en la primer pagina y se muestran menos de 10 clientes
     // desactivo el boton NextPage
-    ( currentPage === 0 && renderedClients.length < 10 ) ? setDisableNextButton( true ) : null;
+    ( currentPage === 0 && renderedClients.length < 9 ) ? setDisableNextButton( true ) : null;
   }, [renderedClients])
 
   
