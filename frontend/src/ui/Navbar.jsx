@@ -7,8 +7,12 @@ import { ClientsContext } from '../context/ClientsContext';
 
 export const Navbar = () => {
 
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const { setSearchedClient, isLoading, setIsLoading } = useContext( ClientsContext );
+
+  const patterns = {
+    numbers: /^[0-9]+$/i
+  };
 
   const onSubmit = async ( { dni } ) => {
     setIsLoading( true );
@@ -26,13 +30,17 @@ export const Navbar = () => {
     setIsLoading(false);
   }
 
+  const deleteSearchedClients = () => {
+    setSearchedClient([]);
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
     <div className="container-fluid">
       <a className="navbar-brand" href="/">Clients App</a>
         <ul className="navbar-nav">
           <li className="nav-item active">
-            <Link className="border border-info rounded m-2 nav-link" to={`/`}>Listado de clientes</Link>
+            <Link onClick={deleteSearchedClients} className="border border-info rounded m-2 nav-link" to={`/`}>Listado de clientes</Link>
           </li>
           <li className="nav-item active">
             <Link reloadDocument className="border border-info rounded m-2 nav-link" to={`/create`}>Agregar cliente</Link>
@@ -41,19 +49,24 @@ export const Navbar = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="d-flex" role="search">
           <input 
             name='dni'
-            {...register("dni")} 
-            className="form-control me-2" 
-            type="number" 
+            className={`form-control me-2 ${errors.dni ? "is-invalid" : ""}`} 
+            type="text" 
             placeholder="Buscar por DNI"
+            {...register("dni", { 
+              pattern: {
+                value: patterns.numbers
+              }
+            })}
           />
-            { isLoading ? (
-            <button className="btn btn-outline-info" disabled>
-              {/* <span class="spinner-border spinner-border-sm"></span> */}
-              Cargando...
+          <div id="dni" className="invalid-feedback">Sólo números</div>
+          { isLoading ? (
+           <button className="btn btn-outline-info" disabled>
+            {/* <span class="spinner-border spinner-border-sm"></span> */}
+            Cargando...
             </button>
-            ) : (
-              <button className="btn btn-outline-info" type="submit">Buscar</button>
-            )}
+          ) : (
+            <button className="btn btn-outline-info" type="submit">Buscar</button>
+          )}
       </form>
       </div>
       
