@@ -2,6 +2,7 @@
   <a target="blank"><img src="https://brandemia.org/contenido/subidas/2021/10/05-telecom-argentina-1200x670.jpg" width="400" alt="Telecom" /></a>
 </p>
 
+Esta aplicacion fue realizada en un lapso de una semana, aproximadamente 16hs de desarrollo.
 
 # Challenge Full Stack Telecom
 Aplicación Web para gestión de clientes.
